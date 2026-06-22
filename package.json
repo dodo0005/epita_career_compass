@@ -18,12 +18,14 @@
   "dependencies": {
     "-": "^0.0.1-security.1",
     "@mistralai/mistralai": "^2.2.6",
+    "axios": "^1.18.1",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
-    "openai": "^6.44.0"
+    "openai": "^6.44.0",
+    "react-router-dom": "^7.18.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
