@@ -69,7 +69,7 @@ export async function askCareerCompass(messages) {
                 console.log("Trying Mistral API...");
 
                 const response =
-                    await mistral.chat({
+                    await mistral.chat.complete({
                         model:
                             "mistral-small-latest",
                         messages,

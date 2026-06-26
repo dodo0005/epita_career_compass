@@ -2,7 +2,7 @@
   "name": "epita-career-compass",
   "version": "1.0.0",
   "type": "module",
-  "main": " backend/server.js",
+  "main": "backend/server.js",
   "directories": {
     "doc": "docs"
   },
@@ -16,14 +16,15 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "-": "^0.0.1-security.1",
     "@mistralai/mistralai": "^2.2.6",
+    "@prisma/client": "^6.19.0",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
-    "openai": "^6.44.0"
+    "openai": "^6.44.0",
+    "prisma": "^6.19.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"

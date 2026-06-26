@@ -1,0 +1,9 @@
+export const MODELS = {
+
+    PRIMARY:
+    "meta-llama/llama-3.2-3b-instruct:free",
+
+    BACKUP:
+    "google/gemma-3-4b-it:free"
+
+};
