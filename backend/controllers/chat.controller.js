@@ -2,6 +2,7 @@ import { askCareerCompass } from "../services/llm.service.js";
 import { writeFileSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
+import prisma from "../config/prisma.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -244,24 +245,142 @@ The UI should display these clickable prompt suggestions on first load:
 5. "What happens to my visa after I graduate?"
 [END FRONTEND NOTE]`;
 
-
 export async function chat(req, res) {
 
     try {
 
-        const { message, models } = req.body;
+        const { message, sessionId } = req.body;
+
 
         if (!message) {
-            return res.status(400).json({ error: "Message is required" });
+
+            return res.status(400).json({
+                error: "Message is required"
+            });
+
         }
 
+
+        let session;
+
+
+        // Existing conversation
+        if (sessionId) {
+
+            session = await prisma.session.findUnique({
+
+                where: {
+                    id: Number(sessionId)
+                }
+
+            });
+
+
+            if (!session) {
+
+                return res.status(404).json({
+                    error: "Session not found"
+                });
+
+            }
+
+
+        } 
+        
+        // New conversation
+        else {
+
+
+            session = await prisma.session.create({
+
+                data: {
+
+                    userId: req.user.userId,
+
+                    title:
+                    message.length > 40
+                    ? message.substring(0,40)+"..."
+                    : message
+
+                }
+
+            });
+
+
+        }
+
+
+
         const messages = [
-            { role: "system", content: SYSTEM_PROMPT },
-            { role: "user", content: message }
+
+            {
+                role:"system",
+                content:SYSTEM_PROMPT
+            },
+
+            {
+                role:"user",
+                content:message
+            }
+
         ];
 
-        const answers = await askCareerCompass(messages);
 
+
+        // AI call
+        const reply = await askCareerCompass(messages);
+
+
+
+        // Save user message
+
+        await prisma.message.create({
+
+            data: {
+
+                sessionId: session.id,
+
+                role:"user",
+
+                content:message
+
+            }
+
+        });
+
+
+
+        // Save assistant message
+
+        await prisma.message.create({
+
+            data: {
+
+                sessionId:session.id,
+
+                role:"assistant",
+
+                model:reply.model,
+
+                content:reply.content
+
+            }
+
+        });
+
+
+
+        res.json({
+
+            sessionId:session.id,
+
+            reply:reply.content,
+
+            model:reply.model
+
+        });
+
+        // Keep your benchmark markdown
         const md = `# CareerCompass Benchmark — ${new Date().toLocaleString()}
 
 **Prompt:** ${message}
@@ -286,15 +405,88 @@ ${answers.mistral}
 `;
 
         const outputPath = join(__dirname, "../../benchmark.md");
+
         writeFileSync(outputPath, md, "utf8");
-        console.log(`Benchmark written to benchmark.md`);
 
-        res.json(answers);
+        console.log("Benchmark written to benchmark.md");
 
-    } catch(error) {
+        res.json({
+
+            sessionId: session.id,
+
+            answers
+
+        });
+
+    } catch (error) {
 
         console.error(error);
 
-        res.status(500).json({ error: "AI request failed" });
+        res.status(500).json({
+
+            error: "AI request failed"
+
+        });
+
     }
+
+}
+export async function getSessions(req, res) {
+    try {
+
+        const sessions = await prisma.session.findMany({
+
+            where: {
+                userId: req.user.userId
+            },
+
+            orderBy: {
+                createdAt: "desc"
+            }
+
+        });
+
+        res.json(sessions);
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            error: "Failed to fetch sessions"
+        });
+
+    }
+}
+
+export async function getHistory(req, res) {
+
+    try {
+
+        const { id } = req.params;
+
+        const messages = await prisma.message.findMany({
+
+            where: {
+                sessionId: Number(id)
+            },
+
+            orderBy: {
+                createdAt: "asc"
+            }
+
+        });
+
+        res.json(messages);
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            error: "Failed to fetch chat history"
+        });
+
+    }
+
 }

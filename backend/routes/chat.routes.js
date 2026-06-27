@@ -1,5 +1,5 @@
 import express from "express";
-import { chat } from "../controllers/chat.controller.js";
+import { chat, getSessions, getHistory } from "../controllers/chat.controller.js";
 
 import {
     authenticate
@@ -12,6 +12,18 @@ router.post(
     "/",
     authenticate,
     chat
+);
+
+router.get(
+    "/sessions",
+    authenticate,
+    getSessions
+);
+
+router.get(
+    "/history/:id",
+    authenticate,
+    getHistory
 );
 
 export default router;
