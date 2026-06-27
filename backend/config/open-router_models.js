@@ -1,12 +1,5 @@
 export const MODELS = {
-
-    PRIMARY:
-    "meta-llama/llama-3.2-3b-instruct:free",
-
-    SECONDARY:
-    "google/gemma-3-4b-it:free",
-
-    BACKUP:
-    "mistral-small-latest"
-
+    PRIMARY:   "mistral-small-latest",
+    SECONDARY: "llama-3.3-70b-versatile",
+    BACKUP:    "openai/gpt-oss-120b:free",
 };
