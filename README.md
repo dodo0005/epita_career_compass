@@ -1,0 +1,448 @@
+# CareerCompass 🎓🤖
+
+CareerCompass is an AI-powered career guidance chatbot designed to help EPITA students and prospective students choose the right academic path, specialization, and career direction.
+
+The application combines a React frontend with a Node.js backend and uses multiple Large Language Models (LLMs) with automatic fallback handling to provide reliable career advice.
+
+---
+
+# Features
+
+## AI Career Advisor
+
+CareerCompass helps students with:
+
+- EPITA program selection
+- ING cycle major selection
+- MSc track recommendations
+- Career path exploration
+- Internship guidance
+- International student questions
+- French visa/post-graduation guidance
+
+The AI is restricted to EPITA-related career and academic topics.
+
+---
+
+## Multi-Model AI System
+
+CareerCompass uses a fallback architecture:
+
+1. **Primary:** Mistral API
+2. **Secondary:** Groq Llama 3.3 70B
+3. **Backup:** OpenRouter GPT-OSS 120B
+
+The system does not run models in parallel.
+
+The request flow is:
+User Question
+|
+v
+Mistral
+|
+| failure
+v
+Groq Llama
+|
+| failure
+v
+OpenRouter GPT-OSS
+
+
+The first available model generates the response.
+
+---
+
+## Chat Sessions
+
+Users can have persistent conversations.
+
+Features:
+
+- Create new chat sessions
+- Save conversations
+- Reload previous chats
+- Store AI responses
+- Track which model answered
+
+Database structure:
+User
+|
+└── Sessions
+|
+└── Messages
+
+
+Each message contains:
+
+- Role (user/assistant)
+- Content
+- Model used
+- Timestamp
+
+---
+
+## Benchmark Generation
+
+Every AI request generates a benchmark markdown file containing:
+
+- User prompt
+- Model response
+- Provider information
+
+Example:
+benchmark.md
+
+CareerCompass Benchmark
+
+Prompt:
+"I like cybersecurity"
+
+Response:
+Recommended major: SRS
+
+
+---
+
+# Tech Stack
+
+## Frontend
+
+- React
+- Vite
+- React Router
+- Axios
+
+## Backend
+
+- Node.js
+- Express
+- Prisma ORM
+- PostgreSQL
+
+## AI Providers
+
+- Mistral API
+- Groq API
+- OpenRouter API
+
+## Database
+
+PostgreSQL (Neon recommended)
+
+---
+
+# Project Structure
+│
+├── backend/
+│ │
+│ ├── controllers/
+│ │ └── chat.controller.js
+│ │
+│ ├── services/
+│ │ └── llm.service.js
+│ │
+│ ├── config/
+│ │ └── prisma.js
+│ │
+│ ├── prisma/
+│ │ └── schema.prisma
+│ │
+│ └── server.js
+│
+│
+├── frontend/
+│ │
+│ ├── src/
+│ │
+│ ├── components/
+│ │
+│ ├── pages/
+│ │
+│ └── services/
+│
+│
+├── package.json
+└── README.md
+
+
+
+---
+
+# Installation
+
+## Requirements
+
+Install:
+
+- Node.js 20+
+- PostgreSQL database
+
+Check:
+
+```bash
+node -v
+npm -v
+
+
+Backend Setup
+
+Go to the project root:
+
+cd epita-career-compass
+
+Install dependencies:
+
+npm install
+
+Create a .env file:
+
+DATABASE_URL="your_postgresql_connection_string"
+
+MISTRAL_API_KEY="your_key"
+
+GROQ_API_KEY="your_key"
+
+OPENROUTER_API_KEY="your_key"
+
+JWT_SECRET="your_secret"
+
+
+Setup Database
+
+Run Prisma:
+
+npx prisma generate
+
+Push database schema:
+
+npx prisma db push
+
+The database will create:
+
+Users
+Sessions
+Messages
+
+Start Backend
+
+Run:
+
+npm run dev
+
+Expected output:
+
+Server running on port 5000
+
+Backend URL:
+
+http://localhost:5000
+
+
+Frontend Setup
+
+Open another terminal:
+
+cd frontend
+
+Install dependencies:
+
+npm install
+
+Install required packages if missing:
+npm install react react-dom react-router-dom axios
+
+Start Frontend
+
+Run: npx vite
+
+Expected output:
+
+VITE ready
+
+Local:
+http://localhost:5173/
+
+Open:
+
+http://localhost:5173/
+
+
+Running the Application
+
+You need two terminals.
+
+Terminal 1
+
+Backend:
+
+npm run dev
+
+Runs:
+
+localhost:5000
+
+
+Terminal 2
+
+Frontend:
+
+cd frontend
+npx vite
+
+Runs:
+
+localhost:5173
+
+
+API Endpoints
+Authentication
+Register
+POST /api/auth/register
+
+Example:
+
+{
+  "email": "student@example.com",
+  "password": "password123"
+}
+
+
+Login
+POST /api/auth/login
+
+Returns authentication token.
+
+
+Chat API
+Send Message
+POST /api/chat
+
+Example:
+
+{
+  "message": "I like cybersecurity and C programming",
+  "sessionId": 1
+}
+
+Response:
+{
+  "sessionId":1,
+  "answer":{
+    "model":"mistral-small-latest",
+    "content":"You should consider SRS..."
+  }
+
+
+Session API
+Get Sessions
+GET /api/sessions
+
+Returns user's previous conversations.
+
+
+Get Chat History
+GET /api/history/:id
+
+Example:
+
+GET /api/history/1
+
+Returns:
+
+[
+ {
+  "role":"user",
+  "content":"I like AI"
+ },
+ {
+  "role":"assistant",
+  "content":"Consider SCIA"
+ }
+]
+
+How Sessions Work
+
+A new conversation:
+
+User sends message
+        |
+        v
+Backend creates Session
+        |
+        v
+Message saved
+        |
+        v
+Frontend stores sessionId
+
+Future messages:
+
+message + sessionId
+        |
+        v
+Existing session updated
+
+If no sessionId is provided, a new session is created.
+
+Development Notes
+AI Provider Fallback
+
+The application intentionally does not use parallel requests.
+
+Reason:
+
+Lower API cost
+Avoid unnecessary requests
+Use backup providers only when needed
+
+
+Database Migrations
+
+After changing Prisma schema:
+
+npx prisma generate
+npx prisma db push
+
+
+Debugging
+
+Backend:
+
+Check terminal logs:
+
+Trying Mistral API...
+Response generated by: Mistral
+
+Frontend:
+
+Browser:
+
+F12 → Console
+
+Network:
+
+F12 → Network tab
+
+
+
+Future Improvements
+
+Possible additions:
+
+Streaming AI responses
+Better session naming
+User profiles
+Student recommendation scoring
+Analytics dashboard
+Admin panel
+Document retrieval (RAG) from EPITA resources
+Authors
+
+EPITA CareerCompass Project
+
+AI Career Guidance Platform
+
+
+
+This README matches the current architecture you built: **React + Express + Prisma + PostgreSQL + fallback LLM chain + persistent sessions**.
