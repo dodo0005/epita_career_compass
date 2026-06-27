@@ -1,6 +1,7 @@
 import OpenAI from "openai";
 import { Mistral } from "@mistralai/mistralai";
 import dotenv from "dotenv";
+import { MODELS } from "../config/open-router_models.js";
 
 dotenv.config();
 
@@ -23,8 +24,7 @@ export async function askCareerCompass(messages) {
 
         const response =
             await openRouter.chat.completions.create({
-                model:
-                    "meta-llama/llama-3.2-3b-instruct:free",
+                model: MODELS.PRIMARY,
                 messages,
             });
 
@@ -46,8 +46,7 @@ export async function askCareerCompass(messages) {
 
             const response =
                 await openRouter.chat.completions.create({
-                    model:
-                        "google/gemma-3-4b-it:free",
+                    model: MODELS.SECONDARY,
                     messages,
                 });
 
@@ -69,9 +68,8 @@ export async function askCareerCompass(messages) {
                 console.log("Trying Mistral API...");
 
                 const response =
-                    await mistral.chat({
-                        model:
-                            "mistral-small-latest",
+                    await mistral.chat.complete({
+                        model: MODELS.BACKUP,
                         messages,
                     });
 
