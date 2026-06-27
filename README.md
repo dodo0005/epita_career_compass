@@ -66,12 +66,13 @@ Features:
 - Track which model answered
 
 Database structure:
+```
 User
 |
 └── Sessions
 |
 └── Messages
-
+```
 
 Each message contains:
 
@@ -133,6 +134,7 @@ PostgreSQL (Neon recommended)
 ---
 
 # Project Structure
+```
 │
 ├── backend/
 │ │
@@ -164,7 +166,7 @@ PostgreSQL (Neon recommended)
 │
 ├── package.json
 └── README.md
-
+```
 
 
 ---
