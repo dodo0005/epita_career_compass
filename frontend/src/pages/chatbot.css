@@ -256,8 +256,32 @@ body {
   font-size: 0.95rem;
   line-height: 1.6;
   max-width: 560px;
-  white-space: pre-wrap;
   word-break: break-word;
+}
+
+.bubble-ai-msg p,
+.bubble-ai-msg ul,
+.bubble-ai-msg ol,
+.bubble-ai-msg h1,
+.bubble-ai-msg h2,
+.bubble-ai-msg h3 {
+  margin: 0.4rem 0;
+}
+
+.bubble-ai-msg ul,
+.bubble-ai-msg ol {
+  padding-left: 1.25rem;
+}
+
+.bubble-ai-msg p:first-child,
+.bubble-ai-msg h1:first-child,
+.bubble-ai-msg h2:first-child,
+.bubble-ai-msg h3:first-child {
+  margin-top: 0;
+}
+
+.bubble-ai-msg p:last-child {
+  margin-bottom: 0;
 }
 
 .bubble-user-msg {

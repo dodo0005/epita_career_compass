@@ -1,3 +1,5 @@
+import ReactMarkdown from "react-markdown";
+
 export default function MessageBubble({ message }) {
   const isUser = message.role === "user";
 
@@ -5,7 +7,7 @@ export default function MessageBubble({ message }) {
     <div className={`bubble-wrapper ${isUser ? "bubble-user" : "bubble-ai"}`}>
       <div className="bubble-avatar">{isUser ? "👤" : "🧭"}</div>
       <div className={`bubble ${isUser ? "bubble-user-msg" : "bubble-ai-msg"}`}>
-        {message.content}
+        {isUser ? message.content : <ReactMarkdown>{message.content}</ReactMarkdown>}
       </div>
     </div>
   );
