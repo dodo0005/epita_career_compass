@@ -4,6 +4,8 @@ CareerCompass is an AI-powered career guidance chatbot designed to help EPITA st
 
 The application combines a React frontend with a Node.js backend and uses multiple Large Language Models (LLMs) with automatic fallback handling to provide reliable career advice.
 
+📄 [Project Summary Report](docs/summary-report.docx)
+
 ---
 
 # Features
@@ -441,10 +443,4 @@ Admin panel
 Document retrieval (RAG) from EPITA resources
 Authors
 
-EPITA CareerCompass Project
-
-AI Career Guidance Platform
-
-
-
-This README matches the current architecture you built: **React + Express + Prisma + PostgreSQL + fallback LLM chain + persistent sessions**.
+EPITA CareerCompass Project the new AI Career Guidance Platform
