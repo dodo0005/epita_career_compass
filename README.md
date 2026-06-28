@@ -37,6 +37,7 @@ CareerCompass uses a fallback architecture:
 The system does not run models in parallel.
 
 The request flow is:
+```
 User Question
 |
 v
@@ -49,7 +50,7 @@ Groq Llama
 | failure
 v
 OpenRouter GPT-OSS
-
+```
 
 The first available model generates the response.
 
