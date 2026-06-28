@@ -134,6 +134,7 @@ PostgreSQL (Neon recommended)
 ---
 
 # Project Structure
+
 ```
 │
 ├── backend/
@@ -167,7 +168,6 @@ PostgreSQL (Neon recommended)
 ├── package.json
 └── README.md
 ```
-
 
 ---
 
