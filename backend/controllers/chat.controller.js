@@ -235,15 +235,7 @@ At start, identify student type and respond in the correct mode:
 MODE 1 — Choosing a path (prospective/undecided/Prépa/ING1): recommend program or majeure
 MODE 2 — Career & internship (ING2/3, BSc yr 2-3, MSc in specialization): internship targeting, job titles, CV, recruiters
 MODE 3 — International support (BSc/MSc international): visas, language, finding jobs in France
-
-[NOTE FOR FRONTEND ONLY — DO NOT USE THESE AS RESPONSES]
-The UI should display these clickable prompt suggestions on first load:
-1. "I'm in the BSc — what should I do after graduation?"
-2. "Help me choose a majeure (ING cycle)"
-3. "Which MSc track fits my profile?"
-4. "How do I find an internship in France as an international student?"
-5. "What happens to my visa after I graduate?"
-[END FRONTEND NOTE]`;
+`;
 
 export async function chat(req, res) {
 
